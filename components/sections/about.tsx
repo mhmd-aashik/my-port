@@ -14,12 +14,12 @@ const facts = [
  {
   icon: Globe,
   label: "Projects",
-  value: "50+ Completed",
+  value: "34+ Completed",
  },
  {
   icon: Users,
   label: "Mentorship",
-  value: "100+ Students",
+  value: "30+ Students",
  },
  {
   icon: Zap,

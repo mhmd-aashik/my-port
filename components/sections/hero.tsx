@@ -84,7 +84,7 @@ export function Hero() {
               </Link>
             </Button>
             <Button size="icon" variant="ghost" asChild>
-              <Link href={`mailto:${profile.email}`}>
+              <Link href="#contact">
                 <Mail className="h-5 w-5" />
               </Link>
             </Button>

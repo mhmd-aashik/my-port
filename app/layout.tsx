@@ -10,7 +10,37 @@ const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
   title: "Mohammed Aashik | Full-Stack AI Engineer",
-  description: "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+  description:
+    "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+  keywords: [
+    "Mohammed Aashik",
+    "Full-Stack Engineer",
+    "AI Engineer",
+    "DevOps",
+    "Web Development",
+    "Mobile Applications",
+    "Next.js",
+    "React",
+    "TypeScript",
+  ],
+  authors: [{ name: "Mohammed Aashik" }],
+  creator: "Mohammed Aashik",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://mohammedaashik.com",
+    title: "Mohammed Aashik | Full-Stack AI Engineer",
+    description:
+      "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+    siteName: "Mohammed Aashik Portfolio",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Mohammed Aashik | Full-Stack AI Engineer",
+    description:
+      "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+    creator: "@mohammedaashik",
+  },
 };
 
 export default function RootLayout({

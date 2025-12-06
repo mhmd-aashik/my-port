@@ -27,7 +27,7 @@ export const skills = {
   mobile: ["React Native", "Flutter", "Expo", "Lynx"],
   desktop: ["Electron.js"],
   databases: ["MongoDB", "MySQL", "PostgreSQL", "SQL", "Convex"],
-  orms: ["Mongoose", "Prisma", "Drizzle", "TypeORM"],
+  orms: ["Mongoose", "Prisma", "Drizzle", "TypeORM", "Django ORM"],
   devops: [
     "Linux",
     "Shell Scripting",

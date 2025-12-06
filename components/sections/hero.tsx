@@ -73,9 +73,9 @@ export function Hero() {
             </Link>
           </Button>
           <Button size="lg" variant="outline" asChild>
-            <Link href="/resume.pdf" target="_blank">
+            <a href="/cv/aashik-cv.pdf" download="aashik-cv.pdf">
               Download CV <Download className="ml-2 h-4 w-4" />
-            </Link>
+            </a>
           </Button>
           <div className="flex items-center gap-2 ml-4">
             <Button size="icon" variant="ghost" asChild>

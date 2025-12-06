@@ -1,6 +1,3 @@
-import { profile } from "console"
-
-```javascript
 "use client";
 
 import { Section } from "@/components/ui/section";
@@ -73,7 +70,7 @@ export function Contact() {
          <div>
           <p className="font-medium">Email</p>
           <a
-           href={`mailto:${ profile.email } `}
+           href={`mailto:${profile.email} `}
            className="text-muted-foreground hover:text-primary transition-colors"
           >
            {profile.email}
@@ -87,7 +84,7 @@ export function Contact() {
          <div>
           <p className="font-medium">Phone</p>
           <a
-           href={`tel:${ profile.phone } `}
+           href={`tel:${profile.phone} `}
            className="text-muted-foreground hover:text-primary transition-colors"
           >
            {profile.phone}
@@ -145,6 +142,7 @@ export function Contact() {
           required
           disabled={isSubmitting}
          />
+        </div>
         <Button type="submit" className="w-full" disabled={isSubmitting}>
          {isSubmitting ? "Sending..." : "Send Message"}
         </Button>

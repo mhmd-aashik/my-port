@@ -1,5 +1,6 @@
-import { Navbar } from "@/components/ui/navbar";
-import { Footer } from "@/components/ui/footer";
+import { IdeSidebar } from "@/components/layout/ide-sidebar";
+import { IdeTabs } from "@/components/layout/ide-tabs";
+import { IdeTerminal } from "@/components/layout/ide-terminal";
 import { Hero } from "@/components/sections/hero";
 import { About } from "@/components/sections/about";
 import { Experience } from "@/components/sections/experience";
@@ -12,20 +13,23 @@ import { Contact } from "@/components/sections/contact";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background">
-      <Navbar />
-      <div className="flex flex-col gap-0">
-        <Hero />
-        <About />
-        <Experience />
-        <Education />
-        <Projects />
-        <HobbyProjects />
-        <Skills />
-        <Mentorship />
-        <Contact />
+    <div className="flex min-h-screen bg-background">
+      <IdeSidebar />
+      <div className="flex-1 flex flex-col min-w-0">
+        <IdeTabs />
+        <main className="flex-1 overflow-y-auto">
+          <Hero />
+          <About />
+          <Experience />
+          <Education />
+          <Projects />
+          <HobbyProjects />
+          <Skills />
+          <Mentorship />
+          <Contact />
+        </main>
+        <IdeTerminal />
       </div>
-      <Footer />
-    </main>
+    </div>
   );
 }

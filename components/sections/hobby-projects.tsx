@@ -29,66 +29,64 @@ export function HobbyProjects() {
   );
 
   return (
-    <Section id="hobby-projects">
-      <div className="space-y-12">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl md:text-4xl font-bold">Hobby Projects</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+    <Section id="hobby-projects" className="border-t border-border/50">
+      <div className="space-y-8">
+        <div>
+          <h2 className="text-2xl md:text-3xl font-bold mb-2">Hobby Projects</h2>
+          <p className="text-muted-foreground text-sm">
             Personal builds where I experiment with ideas and new tech stacks.
           </p>
         </div>
 
-        <div className="flex justify-center gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap">
           {hobbyCategories.map((category) => (
             <Button
               key={category}
               variant={activeCategory === category ? "default" : "outline"}
+              size="sm"
               onClick={() => setActiveCategory(category)}
-              className="rounded-full"
+              className="rounded-md font-mono text-xs"
             >
               {category}
             </Button>
           ))}
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence mode="popLayout">
             {filteredProjects.map((project) => (
               <motion.div
                 key={project.title}
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 8 }}
+                transition={{ duration: 0.25 }}
               >
-                <Card className="h-full flex flex-col hover:shadow-lg transition-shadow">
-                  <CardHeader>
-                    <CardTitle className="line-clamp-1">
-                      {project.title}
-                    </CardTitle>
-                    <CardDescription className="line-clamp-3">
+                <Card className="h-full flex flex-col border-border">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="line-clamp-1 text-base">{project.title}</CardTitle>
+                    <CardDescription className="line-clamp-3 text-sm">
                       {project.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-1">
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1.5">
                       {project.tech.map((tech) => (
-                        <Badge key={tech} variant="outline">
+                        <Badge
+                          key={tech}
+                          variant="secondary"
+                          className="font-mono text-xs bg-secondary/50 border-border"
+                        >
                           {tech}
                         </Badge>
                       ))}
                     </div>
                   </CardContent>
-                  <CardFooter className="gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                      asChild
-                    >
+                  <CardFooter className="pt-0">
+                    <Button variant="outline" size="sm" className="w-full font-mono text-xs" asChild>
                       <Link href={project.link} target="_blank">
-                        <ExternalLink className="mr-2 h-4 w-4" />
+                        <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
                         View Project
                       </Link>
                     </Button>

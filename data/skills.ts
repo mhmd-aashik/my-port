@@ -1,4 +1,14 @@
 export const skills = {
+  "ai & ml": [
+    "OpenAI API",
+    "LangChain",
+    "RAG",
+    "AI Agents",
+    "Prompt Engineering",
+    "Hugging Face",
+    "Vector DBs",
+    "Embeddings",
+  ],
   programming: ["Java", "JavaScript", "TypeScript", "Python", "Dart"],
   frontend: [
     "HTML",
@@ -50,12 +60,11 @@ export const skills = {
   auth: ["Clerk", "Lucia/AuthJS", "NextAuth", "BetterAuth", "Keycloak"],
   tools: [
     "Figma",
-    "Canva",
-    "Photoshop",
-    "Adobe XD",
     "Postman",
     "Insomnia",
-    "ChatGPT/AI",
+    "Vercel AI SDK",
+    "Cursor",
+    "GitHub Copilot",
   ],
   concepts: ["DSA", "OOP", "REST APIs", "GraphQL", "i18n"],
 };

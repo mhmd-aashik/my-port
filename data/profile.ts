@@ -1,6 +1,6 @@
 export const profile = {
   name: "Mohammed Aashik",
-  role: "Full-Stack AI Engineer | Web & Mobile Developer | DevOps Engineer",
+  role: "Full-Stack AI Engineer | LLM & Agent Integration | Web & DevOps",
   location: "Dubai, United Arab Emirates",
   email: "aashikdevelop@gmail.com",
   phone: "+971-555590574",
@@ -8,6 +8,6 @@ export const profile = {
   linkedin: "https://www.linkedin.com/in/aashikdev/",
   github: "https://github.com/aashikdev",
   summary:
-    "Full-stack developer with 6+ years of experience building scalable web and mobile applications. Strong with React, Next.js, TypeScript, Node.js, NestJS, Express.js, MongoDB and cloud platforms (AWS, Azure, Vercel). Experience in enterprise apps, railway ticketing systems, e-commerce, and API-driven platforms. Passionate about performance, clean architecture, DevOps, and mentoring developers.",
-  avatar: "/avatar.placeholder.png", // We'll need a placeholder or the user can add their image
+    "Full-Stack AI Engineer with 6+ years building intelligent, production-ready applications. I integrate LLMs, RAG, and AI agents into scalable web and mobile systems. Strong with OpenAI, LangChain, React, Next.js, TypeScript, Node.js, and cloud platforms (AWS, Azure, Vercel). Experience in enterprise apps, AI-powered features, and API-driven platforms. Passionate about AI-native architecture, clean code, and mentoring developers.",
+  avatar: "/avatar.placeholder.png",
 };

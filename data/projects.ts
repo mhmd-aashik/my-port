@@ -1,6 +1,22 @@
 export const projects = [
- {
-  title: "Smart Ticketing & Seat Reservation System",
+  {
+    title: "AI-Powered Document Assistant",
+    description:
+      "RAG-based application for intelligent document Q&A. Uses embeddings, vector search, and LLMs to answer questions from uploaded documents with source citations.",
+    tech: ["Next.js", "OpenAI", "LangChain", "Pinecone", "TypeScript"],
+    link: "#",
+    details: {
+      features: [
+        "RAG pipeline with chunking and embeddings",
+        "Streaming responses with source attribution",
+        "Multi-document support and semantic search",
+      ],
+      impact: "Enables intelligent document analysis for enterprise workflows.",
+    },
+    category: "AI/ML",
+  },
+  {
+    title: "Smart Ticketing & Seat Reservation System",
   description:
    "High-performance railway ticketing and train-management platform for the Government Railway. Features engine/carriage catalog, drag-and-drop seat formations, route planning, and holiday calendar.",
   tech: [

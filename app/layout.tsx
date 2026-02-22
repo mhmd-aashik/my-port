@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
   title: "Mohammed Aashik | Full-Stack AI Engineer",
   description:
-    "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+    "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks. 7+ years of experience in AI integration, production systems, and DevOps.",
   keywords: [
     "Mohammed Aashik",
     "Full-Stack Engineer",
@@ -31,7 +34,7 @@ export const metadata: Metadata = {
     url: "https://mohammedaashik.com",
     title: "Mohammed Aashik | Full-Stack AI Engineer",
     description:
-      "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+      "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks.",
     siteName: "Mohammed Aashik Portfolio",
     images: [
       {
@@ -46,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Mohammed Aashik | Full-Stack AI Engineer",
     description:
-      "Senior Full-Stack Engineer specializing in scalable web & mobile applications, AI, and DevOps.",
+      "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks.",
     creator: "@mohammedaashik",
     images: ["/images/me.jpg"],
   },
@@ -58,22 +61,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          inter.variable,
-          outfit.variable
+          GeistSans.variable,
+          jetbrainsMono.variable
         )}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}
-          <Toaster />
+          <Toaster theme="dark" richColors />
         </ThemeProvider>
       </body>
     </html>

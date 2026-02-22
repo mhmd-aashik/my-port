@@ -6,7 +6,7 @@ import { profile } from "@/data/profile";
 import { Code2, Globe, Users, Bot } from "lucide-react";
 
 const facts = [
-  { icon: Code2, label: "Experience", value: "6+ Years" },
+  { icon: Code2, label: "Experience", value: "7+ Years" },
   { icon: Globe, label: "Projects", value: "34+ Completed" },
   { icon: Users, label: "Mentorship", value: "30+ Students" },
   { icon: Bot, label: "Focus", value: "AI & Full-Stack" },

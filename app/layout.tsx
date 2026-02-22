@@ -14,7 +14,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Mohammed Aashik | Full-Stack AI Engineer",
   description:
-    "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks. 6+ years of experience in AI integration, production systems, and DevOps.",
+    "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks. 7+ years of experience in AI integration, production systems, and DevOps.",
   keywords: [
     "Mohammed Aashik",
     "Full-Stack Engineer",

@@ -26,7 +26,7 @@ export function Section({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.4, delay }}
-        className="max-w-5xl mx-auto px-4 md:px-8"
+        className="max-w-6xl mx-auto px-4 md:px-8 overflow-visible"
       >
         {children}
       </motion.div>

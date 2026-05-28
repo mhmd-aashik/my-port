@@ -1,6 +1,7 @@
 import { IdeTabs } from "@/components/layout/ide-tabs";
 import { IdeTerminal } from "@/components/layout/ide-terminal";
 import { Hero } from "@/components/sections/hero";
+import { FrameCanvas } from "@/components/sections/frame-canvas";
 import { About } from "@/components/sections/about";
 import { Experience } from "@/components/sections/experience";
 import { Education } from "@/components/sections/education";
@@ -16,6 +17,7 @@ export default function Home() {
       <IdeTabs />
       <main className="flex-1 overflow-y-auto min-h-0">
         <Hero />
+        <FrameCanvas />
         <About />
         <Experience />
         <Education />

@@ -1,35 +1,48 @@
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-
-interface SectionProps extends React.HTMLAttributes<HTMLElement> {
-  id?: string;
-  className?: string;
-  children: React.ReactNode;
-  delay?: number;
-}
 
 export function Section({
-  id,
-  className,
   children,
-  delay = 0,
-  ...props
-}: SectionProps) {
+  className,
+  id,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  id?: string;
+}) {
   return (
     <section
       id={id}
-      className={cn("py-16 md:py-20", className)}
-      {...props}
+      className={cn("mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20", className)}
     >
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.4, delay }}
-        className="max-w-6xl mx-auto px-4 md:px-8 overflow-visible"
-      >
-        {children}
-      </motion.div>
+      {children}
     </section>
+  );
+}
+
+export function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  className,
+}: {
+  eyebrow?: string;
+  title: string;
+  description?: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("max-w-2xl", className)}>
+      {eyebrow && (
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+          {eyebrow}
+        </p>
+      )}
+      <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+        {title}
+      </h2>
+      {description && (
+        <p className="mt-3 leading-relaxed text-muted">{description}</p>
+      )}
+    </div>
   );
 }

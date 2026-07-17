@@ -1,33 +1,23 @@
-import { IdeTabs } from "@/components/layout/ide-tabs";
-import { IdeTerminal } from "@/components/layout/ide-terminal";
-import { Hero } from "@/components/sections/hero";
-import { FrameCanvas } from "@/components/sections/frame-canvas";
-import { About } from "@/components/sections/about";
-import { Experience } from "@/components/sections/experience";
-import { Education } from "@/components/sections/education";
-import { Projects } from "@/components/sections/projects";
-import { HobbyProjects } from "@/components/sections/hobby-projects";
-import { Skills } from "@/components/sections/skills";
-import { Mentorship } from "@/components/sections/mentorship";
-import { Contact } from "@/components/sections/contact";
+import { Hero } from "@/components/home/hero";
+import { Summary } from "@/components/home/summary";
+import { FeaturedExperience } from "@/components/home/featured-experience";
+import { FeaturedProjects } from "@/components/home/featured-projects";
+import { Expertise } from "@/components/home/expertise";
+import { StoryPreview } from "@/components/home/story-preview";
+import { LatestPosts } from "@/components/home/latest-posts";
+import { ContactCta } from "@/components/home/contact-cta";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex min-h-screen bg-background flex-col">
-      <IdeTabs />
-      <main className="flex-1 overflow-y-auto min-h-0">
-        <Hero />
-        <FrameCanvas />
-        <About />
-        <Experience />
-        <Education />
-        <Projects />
-        <HobbyProjects />
-        <Skills />
-        <Mentorship />
-        <Contact />
-      </main>
-      <IdeTerminal />
-    </div>
+    <>
+      <Hero />
+      <Summary />
+      <FeaturedExperience />
+      <FeaturedProjects />
+      <Expertise />
+      <StoryPreview />
+      <LatestPosts />
+      <ContactCta />
+    </>
   );
 }

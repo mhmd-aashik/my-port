@@ -1,82 +1,101 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import { JetBrains_Mono } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+import { profile, siteConfig } from "@/data/profile";
+import { socialLinks } from "@/data/social-links";
 import { cn } from "@/lib/utils";
-import { Toaster } from "sonner";
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-});
 
 export const metadata: Metadata = {
-  title: "Mohammed Aashik | Full-Stack AI Engineer",
-  description:
-    "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks. 7+ years of experience in AI integration, production systems, and DevOps.",
+  metadataBase: new URL(siteConfig.url),
+  title: {
+    default: siteConfig.title,
+    template: "%s — Mohammed Aashik",
+  },
+  description: siteConfig.description,
   keywords: [
-    "Mohammed Aashik",
-    "Full-Stack Engineer",
+    "Full Stack Software Engineer",
+    "Senior Software Engineer",
+    "NestJS Developer",
+    "Node.js Developer",
+    "Backend Engineer",
+    "Next.js Developer",
+    "React Developer",
+    "Microservices Engineer",
     "AI Engineer",
-    "DevOps",
-    "Web Development",
-    "Mobile Applications",
-    "Next.js",
-    "React",
-    "TypeScript",
+    "Software Engineer UAE",
+    "Full Stack Developer Dubai",
   ],
-  authors: [{ name: "Mohammed Aashik" }],
-  creator: "Mohammed Aashik",
+  authors: [{ name: profile.name, url: siteConfig.url }],
+  creator: profile.name,
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://mohammedaashik.com",
-    title: "Mohammed Aashik | Full-Stack AI Engineer",
-    description:
-      "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks.",
-    siteName: "Mohammed Aashik Portfolio",
-    images: [
-      {
-        url: "/images/me.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Mohammed Aashik | Full-Stack AI Engineer",
-      },
-    ],
+    url: siteConfig.url,
+    title: siteConfig.title,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mohammed Aashik | Full-Stack AI Engineer",
-    description:
-      "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks.",
-    creator: "@mohammedaashik",
-    images: ["/images/me.jpg"],
+    title: siteConfig.title,
+    description: siteConfig.description,
   },
+  robots: { index: true, follow: true },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.title,
+  url: siteConfig.url,
+  email: profile.email,
+  address: { "@type": "PostalAddress", addressLocality: "Dubai", addressCountry: "AE" },
+  sameAs: [socialLinks.linkedin, socialLinks.github],
+  knowsAbout: ["Node.js", "NestJS", "Next.js", "React", "TypeScript", "Go", "Microservices", "Docker", "Kubernetes", "AWS"],
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: siteConfig.url,
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen font-sans antialiased",
           GeistSans.variable,
-          jetbrainsMono.variable
+          GeistMono.variable
         )}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([personJsonLd, websiteJsonLd]),
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
-          <Toaster theme="dark" richColors />
+          <Navbar />
+          <main id="main" className="pt-16">
+            {children}
+          </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

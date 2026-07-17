@@ -1,111 +1,189 @@
 @import "tailwindcss";
 
-@theme {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-jetbrains-mono);
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
+  --color-subtle: var(--subtle);
+  --color-border: var(--border-c);
+  --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-strong: var(--accent-strong);
 
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
 }
 
 :root {
-  --background: #0F1419;
-  --foreground: #E6EDF3;
-  --card: #161B22;
-  --card-foreground: #E6EDF3;
-  --popover: #161B22;
-  --popover-foreground: #E6EDF3;
-  --primary: #7C5CFF;
-  --primary-foreground: #FFFFFF;
-  --secondary: #21262D;
-  --secondary-foreground: #8B949E;
-  --muted: #21262D;
-  --muted-foreground: #8B949E;
-  --accent: #21262D;
-  --accent-foreground: #E6EDF3;
-  --destructive: #F85149;
-  --destructive-foreground: #FFFFFF;
-  --border: #30363D;
-  --input: #30363D;
-  --ring: #7C5CFF;
-  --radius: 0.375rem;
-  --accent-mint: #4DE1C1;
+  --background: #fafafa;
+  --foreground: #16161c;
+  --surface: #ffffff;
+  --surface-raised: #f4f4f6;
+  --muted: #5b5b66;
+  --subtle: #8a8a94;
+  --border-c: rgba(22, 22, 28, 0.09);
+  --border-strong: rgba(22, 22, 28, 0.18);
+  --accent: #0891b2;
+  --accent-soft: rgba(8, 145, 178, 0.09);
+  --accent-strong: #0e7490;
+  --grid-line: rgba(22, 22, 28, 0.045);
 }
 
 .dark {
-  --background: #0F1419;
-  --foreground: #E6EDF3;
-  --card: #161B22;
-  --card-foreground: #E6EDF3;
-  --popover: #161B22;
-  --popover-foreground: #E6EDF3;
-  --primary: #7C5CFF;
-  --primary-foreground: #FFFFFF;
-  --secondary: #21262D;
-  --secondary-foreground: #8B949E;
-  --muted: #21262D;
-  --muted-foreground: #8B949E;
-  --accent: #21262D;
-  --accent-foreground: #E6EDF3;
-  --destructive: #F85149;
-  --destructive-foreground: #FFFFFF;
-  --border: #30363D;
-  --input: #30363D;
-  --ring: #7C5CFF;
+  --background: #0a0a0d;
+  --foreground: #ededf1;
+  --surface: #101014;
+  --surface-raised: #16161c;
+  --muted: #a2a2ae;
+  --subtle: #6e6e7a;
+  --border-c: rgba(237, 237, 241, 0.08);
+  --border-strong: rgba(237, 237, 241, 0.16);
+  --accent: #22d3ee;
+  --accent-soft: rgba(34, 211, 238, 0.09);
+  --accent-strong: #67e8f9;
+  --grid-line: rgba(237, 237, 241, 0.035);
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--background);
+}
+
+/* Subtle background grid used behind the hero */
+.bg-grid {
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, var(--accent) 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
   }
-  body {
-    @apply bg-background text-foreground antialiased;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
-/* IDE-style glow effects */
-.glow-primary {
-  box-shadow: 0 0 20px rgba(124, 92, 255, 0.3);
+/* Long-form prose for blog articles and My Story */
+.prose {
+  line-height: 1.75;
+  color: var(--muted);
 }
-.glow-primary-sm {
-  box-shadow: 0 0 8px rgba(124, 92, 255, 0.25);
+.prose h2,
+.prose h3 {
+  color: var(--foreground);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  scroll-margin-top: 6rem;
 }
-.glow-mint {
-  box-shadow: 0 0 20px rgba(77, 225, 193, 0.25);
+.prose h2 {
+  font-size: 1.5rem;
+  margin: 2.5rem 0 1rem;
 }
-.focus-glow:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px #0F1419, 0 0 0 4px rgba(124, 92, 255, 0.5);
+.prose h3 {
+  font-size: 1.15rem;
+  margin: 2rem 0 0.75rem;
+}
+.prose p {
+  margin: 1rem 0;
+}
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.prose ul,
+.prose ol {
+  margin: 1rem 0;
+  padding-left: 1.4rem;
+}
+.prose ul {
+  list-style: disc;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li {
+  margin: 0.4rem 0;
+}
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-c);
+  border-radius: 6px;
+  padding: 0.15em 0.4em;
+  color: var(--foreground);
+}
+.prose pre {
+  background: var(--surface);
+  border: 1px solid var(--border-c);
+  border-radius: 12px;
+  padding: 1.25rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--foreground);
+}
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border-c);
+  margin: 2.5rem 0;
+}
+.prose strong {
+  color: var(--foreground);
+  font-weight: 600;
 }

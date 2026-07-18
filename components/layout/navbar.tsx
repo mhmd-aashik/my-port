@@ -4,12 +4,18 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, Download } from "lucide-react";
-import { navItems } from "@/data/navigation";
-import { profile } from "@/data/profile";
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
 
-export function Navbar() {
+type NavItem = { label: string; href: string };
+
+export function Navbar({
+  navItems,
+  cvPath,
+}: {
+  navItems: NavItem[];
+  cvPath: string;
+}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -23,6 +29,9 @@ export function Navbar() {
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
+
+  // The CMS has its own chrome.
+  if (pathname.startsWith("/admin")) return null;
 
   return (
     <header
@@ -43,10 +52,7 @@ export function Navbar() {
         aria-label="Main"
         className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6"
       >
-        <Link
-          href="/"
-          className="font-mono text-sm font-semibold tracking-tight"
-        >
+        <Link href="/" className="font-mono text-sm font-semibold tracking-tight">
           <span className="text-accent">~/</span>aashik
         </Link>
 
@@ -74,7 +80,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <ModeToggle />
           <a
-            href={profile.cvPath}
+            href={cvPath}
             download
             className="hidden items-center gap-1.5 rounded-md border border-border-strong px-3 py-1.5 text-sm text-muted transition-colors hover:border-accent hover:text-foreground sm:inline-flex"
           >
@@ -113,7 +119,7 @@ export function Navbar() {
               </Link>
             ))}
             <a
-              href={profile.cvPath}
+              href={cvPath}
               download
               className="mt-2 flex items-center gap-2 rounded-md border border-border-strong px-3 py-2.5 text-base text-muted"
             >

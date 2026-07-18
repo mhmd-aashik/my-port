@@ -4,7 +4,9 @@ import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { skillCategories, skillTiers, skillsInPractice } from "@/data/skills";
+import { getSkillGroups, getSkillsInPractice } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Skills",
@@ -13,7 +15,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/skills" },
 };
 
-export default function SkillsPage() {
+export default async function SkillsPage() {
+  const [groups, inPractice] = await Promise.all([
+    getSkillGroups(),
+    getSkillsInPractice(),
+  ]);
+
   return (
     <>
       <PageHeader
@@ -24,7 +31,7 @@ export default function SkillsPage() {
 
       <Section>
         <div className="space-y-10">
-          {Object.values(skillTiers).map((tier, i) => (
+          {groups.map((tier, i) => (
             <Reveal key={tier.label} delay={i * 0.06}>
               <div className="grid gap-3 sm:grid-cols-[220px_1fr] sm:gap-8">
                 <div>
@@ -35,7 +42,7 @@ export default function SkillsPage() {
                 </div>
                 <div className="flex flex-wrap content-start gap-2">
                   {tier.skills.map((s) => (
-                    <Badge key={s} variant={i === 0 ? "accent" : "default"}>
+                    <Badge key={s} variant={tier.core ? "accent" : "default"}>
                       {s}
                     </Badge>
                   ))}
@@ -46,56 +53,31 @@ export default function SkillsPage() {
         </div>
       </Section>
 
-      <Section className="border-t border-border">
-        <Reveal>
-          <SectionHeading
-            eyebrow="In Practice"
-            title="How I use these skills"
-            description="Technologies mapped to the real engineering work they enable."
-          />
-        </Reveal>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {skillsInPractice.map((item, i) => (
-            <Reveal key={item.skill} delay={(i % 3) * 0.06}>
-              <Card className="h-full">
-                <h3 className="font-mono text-sm font-semibold text-accent">
-                  {item.skill}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {item.usage}
-                </p>
-              </Card>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
-
-      <Section className="border-t border-border">
-        <Reveal>
-          <SectionHeading
-            eyebrow="By Discipline"
-            title="The full toolbox"
-          />
-        </Reveal>
-        <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
-          {skillCategories.map((cat, i) => (
-            <Reveal key={cat.name} delay={(i % 4) * 0.05}>
-              <div>
-                <h3 className="font-mono text-xs uppercase tracking-wider text-subtle">
-                  {cat.name}
-                </h3>
-                <ul className="mt-3 space-y-1.5">
-                  {cat.skills.map((s) => (
-                    <li key={s} className="text-sm text-muted">
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
+      {inPractice.length > 0 && (
+        <Section className="border-t border-border">
+          <Reveal>
+            <SectionHeading
+              eyebrow="In Practice"
+              title="How I use these skills"
+              description="Technologies mapped to the real engineering work they enable."
+            />
+          </Reveal>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {inPractice.map((item, i) => (
+              <Reveal key={item.skill} delay={(i % 3) * 0.06}>
+                <Card className="h-full">
+                  <h3 className="font-mono text-sm font-semibold text-accent">
+                    {item.skill}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">
+                    {item.usage}
+                  </p>
+                </Card>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+      )}
     </>
   );
 }

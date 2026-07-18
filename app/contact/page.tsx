@@ -4,8 +4,9 @@ import { ContactForm } from "@/components/forms/contact-form";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { profile } from "@/data/profile";
-import { socialLinks } from "@/data/social-links";
+import { getProfile, getSettings, getSocialLinks } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -14,44 +15,37 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contact" },
 };
 
-const details = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: profile.email,
-    href: socialLinks.email,
-  },
-  {
-    icon: Linkedin,
-    label: "LinkedIn",
-    value: "linkedin.com/in/aashikdev",
-    href: socialLinks.linkedin,
-  },
-  {
-    icon: Github,
-    label: "GitHub",
-    value: "github.com/aashikdev",
-    href: socialLinks.github,
-  },
-  {
-    icon: MapPin,
-    label: "Location",
-    value: profile.location,
-  },
-  {
-    icon: Globe,
-    label: "Availability",
-    value: "On-site in the UAE · Remote worldwide",
-  },
-];
+export default async function ContactPage() {
+  const [profile, social, settings] = await Promise.all([
+    getProfile(),
+    getSocialLinks(),
+    getSettings(),
+  ]);
 
-export default function ContactPage() {
+  const details = [
+    { icon: Mail, label: "Email", value: profile.email, href: social.email },
+    {
+      icon: Linkedin,
+      label: "LinkedIn",
+      value: social.linkedin.replace(/^https?:\/\/(www\.)?/, ""),
+      href: social.linkedin,
+    },
+    {
+      icon: Github,
+      label: "GitHub",
+      value: social.github.replace(/^https?:\/\/(www\.)?/, ""),
+      href: social.github,
+    },
+    { icon: MapPin, label: "Location", value: profile.location },
+    { icon: Globe, label: "Availability", value: profile.relocation },
+  ].filter((d) => d.value);
+
   return (
     <>
       <PageHeader
         eyebrow="Contact"
         title="Let's talk about what you're building."
-        description="Senior engineering roles, contract work, consulting, or a technical conversation — all welcome."
+        description={settings.contactPageText || undefined}
       />
       <Section>
         <div className="grid gap-12 lg:grid-cols-[1fr_320px]">
@@ -87,9 +81,11 @@ export default function ContactPage() {
                   </div>
                 </div>
               ))}
-              <p className="rounded-lg border border-border bg-surface p-4 text-sm leading-relaxed text-muted">
-                {profile.responseTime}
-              </p>
+              {profile.responseTime && (
+                <p className="rounded-lg border border-border bg-surface p-4 text-sm leading-relaxed text-muted">
+                  {profile.responseTime}
+                </p>
+              )}
             </aside>
           </Reveal>
         </div>

@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { storyChapters, storyTimeline } from "@/data/story";
+import { markdownToHtml } from "@/lib/markdown";
+import { getStoryChapters, getStoryMilestones } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "My Story",
@@ -11,29 +14,20 @@ export const metadata: Metadata = {
   alternates: { canonical: "/story" },
 };
 
-// Renders [Add ...] placeholders in a visually distinct style so they read
-// as intentional editorial notes, not missing content.
-function StoryText({ text }: { text: string }) {
-  const parts = text.split(/(\[Add [^\]]+\])/g);
-  return (
-    <p className="leading-relaxed text-muted">
-      {parts.map((part, i) =>
-        part.startsWith("[Add") ? (
-          <span
-            key={i}
-            className="mx-0.5 rounded border border-dashed border-border-strong bg-surface-raised px-1.5 py-0.5 font-mono text-xs text-subtle"
-          >
-            {part}
-          </span>
-        ) : (
-          <span key={i}>{part}</span>
-        )
-      )}
-    </p>
+// Renders [Add ...] placeholders as visually distinct editorial notes.
+function highlightPlaceholders(html: string): string {
+  return html.replace(
+    /\[Add ([^\]]+)\]/g,
+    '<span class="story-placeholder">[Add $1]</span>'
   );
 }
 
-export default function StoryPage() {
+export default async function StoryPage() {
+  const [chapters, milestones] = await Promise.all([
+    getStoryChapters(),
+    getStoryMilestones(),
+  ]);
+
   return (
     <>
       <PageHeader
@@ -44,53 +38,69 @@ export default function StoryPage() {
 
       <Section>
         <div className="mx-auto max-w-2xl space-y-14">
-          {storyChapters.map((chapter, i) => (
-            <Reveal key={chapter.number} delay={Math.min(i * 0.03, 0.15)}>
+          {chapters.map((chapter, i) => (
+            <Reveal key={chapter.id} delay={Math.min(i * 0.03, 0.15)}>
               <article>
                 <div className="flex items-baseline gap-4">
                   <span className="font-mono text-sm text-accent">
-                    {chapter.number}
+                    {String(i + 1).padStart(2, "0")}
                   </span>
                   <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
                     {chapter.title}
                   </h2>
+                  {chapter.timePeriod && (
+                    <span className="font-mono text-xs text-subtle">
+                      {chapter.timePeriod}
+                    </span>
+                  )}
                 </div>
-                <div className="mt-4 space-y-4 border-l border-border pl-[2.15rem]">
-                  {chapter.paragraphs.map((p, j) => (
-                    <StoryText key={j} text={p} />
-                  ))}
-                </div>
+                {chapter.pullQuote && (
+                  <blockquote className="mt-4 border-l-2 border-accent pl-4 italic text-muted">
+                    {chapter.pullQuote}
+                  </blockquote>
+                )}
+                <div
+                  className="prose mt-4 border-l border-border pl-[2.15rem]"
+                  dangerouslySetInnerHTML={{
+                    __html: highlightPlaceholders(markdownToHtml(chapter.body)),
+                  }}
+                />
               </article>
             </Reveal>
           ))}
         </div>
       </Section>
 
-      <Section className="border-t border-border">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Timeline"
-            title="Milestones"
-            className="mx-auto max-w-2xl"
-          />
-        </Reveal>
-        <ol className="mx-auto mt-10 max-w-2xl border-l border-border">
-          {storyTimeline.map((item, i) => (
-            <Reveal key={`${item.year}-${item.label}`} delay={i * 0.04}>
-              <li className="relative pb-8 pl-8 last:pb-0">
-                <span
-                  className="absolute -left-[5px] top-1.5 size-2.5 rounded-full border-2 border-background bg-accent"
-                  aria-hidden
-                />
-                <span className="font-mono text-xs text-accent">{item.year}</span>
-                <p className="mt-1 text-sm leading-relaxed text-muted">
-                  {item.label}
-                </p>
-              </li>
-            </Reveal>
-          ))}
-        </ol>
-      </Section>
+      {milestones.length > 0 && (
+        <Section className="border-t border-border">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Timeline"
+              title="Milestones"
+              className="mx-auto max-w-2xl"
+            />
+          </Reveal>
+          <ol className="mx-auto mt-10 max-w-2xl border-l border-border">
+            {milestones.map((item, i) => (
+              <Reveal key={item.id} delay={i * 0.04}>
+                <li className="relative pb-8 pl-8 last:pb-0">
+                  <span
+                    className="absolute -left-[5px] top-1.5 size-2.5 rounded-full border-2 border-background bg-accent"
+                    aria-hidden
+                  />
+                  <span className="font-mono text-xs text-accent">{item.date}</span>
+                  <p className="mt-1 text-sm font-medium">{item.title}</p>
+                  {item.description && (
+                    <p className="mt-1 text-sm leading-relaxed text-muted">
+                      {item.description}
+                    </p>
+                  )}
+                </li>
+              </Reveal>
+            ))}
+          </ol>
+        </Section>
+      )}
     </>
   );
 }

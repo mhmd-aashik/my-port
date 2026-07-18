@@ -4,11 +4,24 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "@/components/ui/section";
-import { formatDate, getAdjacentPosts, getAllPosts, getPost } from "@/lib/blog";
+import { formatDate } from "@/lib/blog";
+import { extractToc, markdownToHtml } from "@/lib/markdown";
+import {
+  getAdjacentPublishedPosts,
+  getPublishedPost,
+  getPublishedPosts,
+} from "@/lib/content";
 import { siteConfig } from "@/data/profile";
 
-export function generateStaticParams() {
-  return getAllPosts().map((p) => ({ slug: p.slug }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  try {
+    const posts = await getPublishedPosts();
+    return posts.map((p) => ({ slug: p.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({
@@ -17,7 +30,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPublishedPost(slug);
   if (!post) return {};
   return {
     title: post.title,
@@ -39,10 +52,12 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPublishedPost(slug);
   if (!post) notFound();
 
-  const { prev, next } = getAdjacentPosts(slug);
+  const { prev, next } = await getAdjacentPublishedPosts(slug);
+  const html = markdownToHtml(post.body);
+  const toc = extractToc(post.body);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -91,19 +106,16 @@ export default async function BlogPostPage({
       <div className="mt-10 grid gap-12 lg:grid-cols-[1fr_220px]">
         <article
           className="prose min-w-0"
-          dangerouslySetInnerHTML={{ __html: post.html }}
+          dangerouslySetInnerHTML={{ __html: html }}
         />
-        {post.toc.length > 1 && (
-          <nav
-            aria-label="Table of contents"
-            className="order-first lg:order-none"
-          >
+        {toc.length > 1 && (
+          <nav aria-label="Table of contents" className="order-first lg:order-none">
             <div className="lg:sticky lg:top-24">
               <h2 className="font-mono text-xs uppercase tracking-wider text-subtle">
                 On this page
               </h2>
               <ul className="mt-3 space-y-2 border-l border-border">
-                {post.toc.map((entry) => (
+                {toc.map((entry) => (
                   <li key={entry.id}>
                     <a
                       href={`#${entry.id}`}

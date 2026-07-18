@@ -1,15 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ArrowRight, Github, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { projectFilters, projects } from "@/data/projects";
+import type { PublicProject } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
-export function ProjectGallery() {
+export function ProjectGallery({ projects }: { projects: PublicProject[] }) {
   const [filter, setFilter] = useState<string>("All");
+
+  const filters = useMemo(() => {
+    const cats = new Set<string>();
+    for (const p of projects) for (const c of p.categories) cats.add(c);
+    return ["All", ...Array.from(cats).sort()];
+  }, [projects]);
 
   const visible =
     filter === "All"
@@ -23,7 +29,7 @@ export function ProjectGallery() {
         aria-label="Filter projects by category"
         className="flex flex-wrap gap-2"
       >
-        {projectFilters.map((f) => (
+        {filters.map((f) => (
           <button
             key={f}
             type="button"

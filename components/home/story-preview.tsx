@@ -2,9 +2,8 @@ import { ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { storyPreview } from "@/data/story";
 
-export function StoryPreview() {
+export function StoryPreview({ intro }: { intro: string }) {
   return (
     <Section className="border-t border-border">
       <Reveal>
@@ -18,9 +17,9 @@ export function StoryPreview() {
               My Story
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
-              {storyPreview.heading}
+              From curiosity to building production software.
             </h2>
-            <p className="mt-4 leading-relaxed text-muted">{storyPreview.text}</p>
+            <p className="mt-4 leading-relaxed text-muted">{intro}</p>
             <div className="mt-7">
               <ButtonLink href="/story" variant="secondary">
                 Read My Story <ArrowRight className="size-4" aria-hidden />

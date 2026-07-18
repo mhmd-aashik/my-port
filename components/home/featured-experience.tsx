@@ -3,10 +3,10 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { experience } from "@/data/experience";
+import type { PublicExperience } from "@/lib/content";
 
-export function FeaturedExperience() {
-  const featured = experience.filter((e) => e.featured);
+export function FeaturedExperience({ roles }: { roles: PublicExperience[] }) {
+  if (roles.length === 0) return null;
   return (
     <Section className="border-t border-border">
       <Reveal>
@@ -25,8 +25,8 @@ export function FeaturedExperience() {
         </div>
       </Reveal>
       <ol className="mt-10 space-y-0 border-l border-border">
-        {featured.map((role, i) => (
-          <Reveal key={`${role.company}-${role.period}`} delay={i * 0.08}>
+        {roles.map((role, i) => (
+          <Reveal key={role.id} delay={i * 0.08}>
             <li className="relative pb-10 pl-8 last:pb-0">
               <span
                 className="absolute -left-[5px] top-1.5 size-2.5 rounded-full border-2 border-background bg-accent"

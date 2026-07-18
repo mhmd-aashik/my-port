@@ -5,10 +5,17 @@ import { ArrowLeft, ExternalLink, Github, Lock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { projects } from "@/data/projects";
+import { getProjectBySlug, getProjects } from "@/lib/content";
 
-export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  try {
+    const projects = await getProjects();
+    return projects.map((p) => ({ slug: p.slug }));
+  } catch {
+    return []; // DB unavailable at build time — pages render on demand.
+  }
 }
 
 export async function generateMetadata({
@@ -17,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -56,7 +63,7 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
   return (
@@ -132,6 +139,11 @@ export default async function ProjectPage({
               <Block title="Challenges">
                 <List items={project.challenges} />
               </Block>
+              {project.challengeSolutions.length > 0 && (
+                <Block title="How they were solved">
+                  <List items={project.challengeSolutions} />
+                </Block>
+              )}
             </div>
           </div>
           <div className="grid gap-8 sm:grid-cols-2">
@@ -139,7 +151,7 @@ export default async function ProjectPage({
             <Block title="Performance">{project.performance}</Block>
           </div>
           <div className="rounded-lg border border-border bg-surface p-6">
-            <Block title="Outcome">{project.outcome}</Block>
+            <Block title="Outcome">{project.results}</Block>
             <div className="mt-6">
               <Block title="Lessons learned">{project.lessons}</Block>
             </div>

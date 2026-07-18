@@ -6,7 +6,10 @@ import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { formatDate, getAllPosts } from "@/lib/blog";
+import { formatDate } from "@/lib/blog";
+import { getPublishedPosts } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -15,8 +18,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
 };
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  const posts = await getPublishedPosts();
   const featured = posts.find((p) => p.featured) ?? posts[0];
   const rest = posts.filter((p) => p !== featured);
 

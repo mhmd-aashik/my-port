@@ -1,10 +1,25 @@
-import Link from "next/link";
-import { Github, Linkedin, Mail } from "lucide-react";
-import { navItems } from "@/data/navigation";
-import { profile } from "@/data/profile";
-import { socialLinks } from "@/data/social-links";
+"use client";
 
-export function Footer() {
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Github, Linkedin, Mail } from "lucide-react";
+
+type NavItem = { label: string; href: string };
+
+export function Footer({
+  navItems,
+  footerText,
+  social,
+  name,
+}: {
+  navItems: NavItem[];
+  footerText: string;
+  social: { linkedin: string; github: string; email: string };
+  name: string;
+}) {
+  const pathname = usePathname();
+  if (pathname.startsWith("/admin")) return null; // CMS has its own chrome
+
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -13,31 +28,32 @@ export function Footer() {
             <p className="font-mono text-sm font-semibold">
               <span className="text-accent">~/</span>aashik
             </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
-              Full-Stack Software Engineer building scalable products from{" "}
-              {profile.location}.
-            </p>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{footerText}</p>
             <div className="mt-4 flex gap-3">
+              {social.github && (
+                <a
+                  href={social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="GitHub"
+                  className="text-subtle transition-colors hover:text-foreground"
+                >
+                  <Github className="size-5" />
+                </a>
+              )}
+              {social.linkedin && (
+                <a
+                  href={social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="LinkedIn"
+                  className="text-subtle transition-colors hover:text-foreground"
+                >
+                  <Linkedin className="size-5" />
+                </a>
+              )}
               <a
-                href={socialLinks.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
-                className="text-subtle transition-colors hover:text-foreground"
-              >
-                <Github className="size-5" />
-              </a>
-              <a
-                href={socialLinks.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className="text-subtle transition-colors hover:text-foreground"
-              >
-                <Linkedin className="size-5" />
-              </a>
-              <a
-                href={socialLinks.email}
+                href={social.email}
                 aria-label="Email"
                 className="text-subtle transition-colors hover:text-foreground"
               >
@@ -58,7 +74,7 @@ export function Footer() {
           </nav>
         </div>
         <p className="mt-10 font-mono text-xs text-subtle">
-          © {new Date().getFullYear()} {profile.name}. Built with Next.js.
+          © {new Date().getFullYear()} {name}. Built with Next.js.
         </p>
       </div>
     </footer>

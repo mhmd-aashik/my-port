@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { formatDate, getAllPosts } from "@/lib/blog";
+import { formatDate } from "@/lib/blog";
+import type { PublicPost } from "@/lib/content";
 
-export function LatestPosts() {
-  const posts = getAllPosts().slice(0, 3);
+export function LatestPosts({ posts }: { posts: PublicPost[] }) {
   if (posts.length === 0) return null;
 
   return (

@@ -1,69 +1,63 @@
-# aashik.dev — Portfolio
+# aashik.dev — Portfolio + Private CMS
 
-Personal portfolio of Mohammed Aashik, Full-Stack Software Engineer. Built with Next.js 16 (App Router), TypeScript, Tailwind CSS 4, and Framer Motion. Dark-first theme with light mode, fully responsive, SEO-ready.
+Database-driven portfolio of Mohammed Aashik with a private, owner-only CMS at `/admin`. Next.js 16 · Drizzle ORM · PostgreSQL (Railway) · Railway Storage Bucket · Tailwind 4.
 
-## Getting started
+## Quick start
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
-npm run build      # production build
-npm run lint       # eslint
-npm run typecheck  # tsc --noEmit
+cp .env.example .env.local          # then fill in values (see below)
+npm run hash-passcode "passcode"    # → paste output into .env.local
+npm run db:generate                 # generate SQL migrations into drizzle/
+npm run db:migrate                  # apply to DATABASE_URL
+npm run db:seed                     # idempotent content seed
+npm run dev                         # http://localhost:3000  (CMS: /admin)
 ```
 
-## Editing content
+## Scripts
 
-All portfolio content lives in `data/` — no professional information is hardcoded in components:
-
-| File | Contents |
+| Script | Purpose |
 |---|---|
-| `data/profile.ts` | Name, title, location, contact, summary, site metadata |
-| `data/experience.ts` | Work history (Veuston dates flagged with a NOTE — verify) |
-| `data/education.ts` | Qualifications and certifications |
-| `data/projects.ts` | Project case studies (GitHub links marked TODO) |
-| `data/skills.ts` | Skill tiers, categories, and "how I use them" |
-| `data/story.ts` | My Story chapters — `[Add ...]` placeholders await your personal memories |
-| `data/navigation.ts` / `data/social-links.ts` | Nav items and social URLs |
+| `dev` / `build` / `start` | Next.js |
+| `lint` / `typecheck` / `test` | ESLint · tsc · Vitest unit tests |
+| `db:generate` | Generate reviewable migrations from `db/schema/*` |
+| `db:migrate` | Apply migrations |
+| `db:studio` | Drizzle Studio (safe DB inspection) |
+| `db:seed` | Idempotent seed from `data/*.ts` + `content/blog/*.md` |
+| `db:reset-dev` | Truncate all tables — dev only, guarded |
+| `hash-passcode` | Generate `ADMIN_PASSCODE_HASH` |
 
-## Blog
+## How content works
 
-Posts are plain Markdown files in `content/blog/*.md` with frontmatter:
+- **All editable content lives in PostgreSQL** and is managed at `/admin` (settings, profile, about, experience, education, projects, skills, story, blog, media, messages, audit log).
+- `data/*.ts` and `content/blog/*.md` are **seed sources only** — after seeding, edit through the CMS.
+- Public pages use ISR; every CMS save revalidates the affected pages, sitemap, and RSS — no redeploys needed.
+- Drafts and archived content never appear publicly; preview drafts from the blog list in the CMS.
+- Uploads go to the private Railway bucket; images/CV are served through `/api/media/[id]`.
 
-```md
----
-title: Post Title
-description: One-line summary.
-date: 2026-07-01
-category: Backend Engineering
-tags: [nestjs, architecture]
-featured: false
----
-```
+## Docs
 
-Rendering uses a small zero-dependency Markdown pipeline in `lib/markdown.ts` (chosen to keep the project dependency-light; swap for `@next/mdx` or Contentlayer later without changing content files). Reading time, table of contents, prev/next navigation, RSS (`/rss.xml`), and sitemap entries are automatic.
-
-## TODOs before deploying
-
-1. `data/profile.ts` — add your CV PDF at `public/cv/mohammed-aashik-cv.pdf` (or update `cvPath`).
-2. `data/projects.ts` — replace placeholder GitHub links with exact repo URLs.
-3. `data/story.ts` — fill in the `[Add ...]` personal placeholders.
-4. Contact form email: copy `.env.example` to `.env.local` and set `RESEND_API_KEY`; update the `from:` sender in `app/api/contact/route.ts` to a verified domain.
-5. Verify Veuston International dates in `data/experience.ts`.
-
-## Deployment (Vercel)
-
-Push to GitHub, import the repo in Vercel, add `RESEND_API_KEY` as an environment variable, deploy. The site is statically generated except the contact API route.
+- `docs/architecture.md` — ERD (Mermaid), security model, storage flow, data safety
+- `docs/railway-deployment.md` — step-by-step Railway setup, migration, backup/restore, secret rotation
 
 ## Structure
 
 ```
-app/          Pages (App Router): home, about, experience, education,
-              projects (+ case studies), skills, story, blog (+ articles),
-              contact, 404, sitemap, robots, rss
-components/   layout/ (navbar, footer), home/ (homepage sections),
-              projects/, forms/, ui/ (primitives)
-content/blog/ Markdown articles
-data/         All editable portfolio content
-lib/          blog reader, markdown pipeline, validation, utils
+app/            public pages · /admin CMS · /api (contact, media, health)
+components/     layout, home sections, projects, forms, ui, admin
+db/             drizzle client, schema (21 tables), relations
+drizzle/        generated SQL migrations (created by db:generate)
+lib/            content queries, markdown pipeline, admin auth/session/audit,
+                storage (S3), validation, env loader
+scripts/        hash-passcode, seed, reset-dev
+tests/          vitest units: session, validation, markdown, file validation
+data/ content/  seed sources (not the runtime content source)
 ```
+
+## Before going live
+
+1. Fill `RAILWAY_BUCKET_SECRET_ACCESS_KEY` in `.env.local`.
+2. Set `ADMIN_PASSCODE_HASH` (never commit it; keep `.env.example` values empty).
+3. Rotate the DB password and bucket credentials in Railway (they were shared in chat during development).
+4. Fill the `[Add ...]` placeholders in My Story via the CMS.
+5. Follow `docs/railway-deployment.md`.

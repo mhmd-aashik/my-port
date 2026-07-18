@@ -5,7 +5,9 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { profile } from "@/data/profile";
+import { getAboutSections, getProfile } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "About",
@@ -14,50 +16,12 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-const principles = [
-  {
-    title: "Build for maintainability, not only immediate delivery",
-    detail:
-      "The person who inherits the code matters as much as the deadline. I optimize for the six-months-later reader.",
-  },
-  {
-    title: "Keep architecture proportionate to the problem",
-    detail:
-      "Microservices, queues, and Kubernetes earn their complexity — or they don't get used.",
-  },
-  {
-    title: "Make security part of the design",
-    detail:
-      "Authentication, authorization, and tenant isolation are architecture, not features bolted on before launch.",
-  },
-  {
-    title: "Measure before optimizing",
-    detail:
-      "Profiles and metrics decide what's slow. Intuition just nominates candidates.",
-  },
-  {
-    title: "Prefer clarity over cleverness",
-    detail:
-      "Code is read far more than it is written. Clever is a cost; clear is an asset.",
-  },
-  {
-    title: "Document important technical decisions",
-    detail:
-      "A short written 'why' outlives everyone's memory of the meeting.",
-  },
-  {
-    title: "Automate repetitive work",
-    detail:
-      "CI/CD, scripts, and tooling — anything done three times by hand should be done a fourth time by a machine.",
-  },
-  {
-    title: "Use AI as an engineering assistant, not a replacement for judgment",
-    detail:
-      "AI accelerates research, refactoring, and testing. Deciding what to build and what to trust stays human.",
-  },
-];
+export default async function AboutPage() {
+  const [profile, principles] = await Promise.all([
+    getProfile(),
+    getAboutSections(),
+  ]);
 
-export default function AboutPage() {
   return (
     <>
       <PageHeader
@@ -71,21 +35,13 @@ export default function AboutPage() {
           <div className="grid gap-10 lg:grid-cols-[1fr_280px] lg:gap-16">
             <div className="space-y-5 leading-relaxed text-muted">
               <p>
-                I&apos;m {profile.name}, a Full-Stack Software Engineer based in{" "}
+                I&apos;m {profile.name}, a {profile.title} based in{" "}
                 {profile.location}, with {profile.yearsOfExperience} years of
                 experience across the stack — from React and Next.js interfaces
                 to NestJS microservices, RabbitMQ messaging, and the Docker and
                 Kubernetes infrastructure underneath them.
               </p>
-              <p>
-                My career has run through very different kinds of systems: SaaS
-                products for international clients, analytics dashboards for
-                UK businesses, a national railway&apos;s ticketing platform, and
-                multi-tenant architecture for enterprise organizations. The
-                common thread is production responsibility — software that real
-                people depend on, with the reliability, security, and
-                performance obligations that come with it.
-              </p>
+              <p>{profile.summary}</p>
               <p>
                 I approach problems by understanding them before architecting
                 them: what the business actually needs, what failure would cost,
@@ -96,17 +52,7 @@ export default function AboutPage() {
               </p>
               <p>
                 Right now I&apos;m deepening my work in software architecture
-                and AI engineering — building AI-assisted features responsibly
-                and studying how large systems stay comprehensible as they
-                grow. I&apos;m looking for senior full-stack, backend, or AI
-                engineering roles — in the UAE or remote — where the
-                engineering problems are real and the bar is high.
-              </p>
-              <p>
-                Outside of shipping software: curiosity, discipline, and the
-                long game. I read documentation for fun more often than I&apos;d
-                admit in person, and I believe consistency beats intensity in
-                careers, codebases, and everything else.
+                and AI engineering. {profile.relocation && `${profile.relocation}.`}
               </p>
             </div>
             <Reveal delay={0.1}>
@@ -117,6 +63,7 @@ export default function AboutPage() {
                   width={280}
                   height={340}
                   className="rounded-lg border border-border object-cover"
+                  unoptimized={profile.avatar.startsWith("/api/")}
                 />
                 <ButtonLink href="/story" variant="secondary" className="w-full">
                   Read My Story <ArrowRight className="size-4" aria-hidden />
@@ -127,27 +74,27 @@ export default function AboutPage() {
         </Reveal>
       </Section>
 
-      <Section className="border-t border-border">
-        <Reveal>
-          <SectionHeading
-            eyebrow="Philosophy"
-            title="Engineering principles"
-            description="The rules I actually follow, learned from systems that punished me when I didn't."
-          />
-        </Reveal>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          {principles.map((p, i) => (
-            <Reveal key={p.title} delay={(i % 2) * 0.06}>
-              <div className="rounded-lg border border-border bg-surface p-5">
-                <h3 className="text-sm font-semibold leading-snug">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted">
-                  {p.detail}
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </Section>
+      {principles.length > 0 && (
+        <Section className="border-t border-border">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Philosophy"
+              title="Engineering principles"
+              description="The rules I actually follow, learned from systems that punished me when I didn't."
+            />
+          </Reveal>
+          <div className="mt-10 grid gap-5 sm:grid-cols-2">
+            {principles.map((p, i) => (
+              <Reveal key={p.id} delay={(i % 2) * 0.06}>
+                <div className="rounded-lg border border-border bg-surface p-5">
+                  <h3 className="text-sm font-semibold leading-snug">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{p.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </Section>
+      )}
     </>
   );
 }

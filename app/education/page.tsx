@@ -4,7 +4,10 @@ import { Card } from "@/components/ui/card";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { certifications, education } from "@/data/education";
+import { certifications } from "@/data/education";
+import { getEducation } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Education",
@@ -13,7 +16,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/education" },
 };
 
-export default function EducationPage() {
+export default async function EducationPage() {
+  const education = await getEducation();
+
   return (
     <>
       <PageHeader
@@ -42,18 +47,13 @@ export default function EducationPage() {
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-muted">
-                    {item.institution} · {item.location}
+                    {item.institution}
+                    {item.location ? ` · ${item.location}` : ""}
                   </p>
                   <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
                     {item.areas.map((a) => (
-                      <li
-                        key={a}
-                        className="flex items-center gap-2 text-sm text-muted"
-                      >
-                        <span
-                          className="size-1 rounded-full bg-accent"
-                          aria-hidden
-                        />
+                      <li key={a} className="flex items-center gap-2 text-sm text-muted">
+                        <span className="size-1 rounded-full bg-accent" aria-hidden />
                         {a}
                       </li>
                     ))}
@@ -67,21 +67,14 @@ export default function EducationPage() {
 
       <Section className="border-t border-border">
         <Reveal>
-          <SectionHeading
-            eyebrow="Certifications"
-            title="Continued learning"
-          />
+          <SectionHeading eyebrow="Certifications" title="Continued learning" />
         </Reveal>
         <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {certifications.map((cert, i) => (
             <Reveal key={cert.title} delay={i * 0.06}>
               <Card className="h-full">
-                <h3 className="text-sm font-semibold leading-snug">
-                  {cert.title}
-                </h3>
-                <p className="mt-1 font-mono text-xs text-subtle">
-                  {cert.issuer}
-                </p>
+                <h3 className="text-sm font-semibold leading-snug">{cert.title}</h3>
+                <p className="mt-1 font-mono text-xs text-subtle">{cert.issuer}</p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">
                   {cert.highlight}
                 </p>

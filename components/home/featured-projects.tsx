@@ -4,10 +4,10 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
-import { projects } from "@/data/projects";
+import type { PublicProject } from "@/lib/content";
 
-export function FeaturedProjects() {
-  const featured = projects.filter((p) => p.featured);
+export function FeaturedProjects({ projects }: { projects: PublicProject[] }) {
+  if (projects.length === 0) return null;
   return (
     <Section className="border-t border-border">
       <Reveal>
@@ -26,7 +26,7 @@ export function FeaturedProjects() {
         </div>
       </Reveal>
       <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        {featured.map((project, i) => (
+        {projects.map((project, i) => (
           <Reveal key={project.slug} delay={i * 0.08}>
             <Card className="group flex h-full flex-col">
               <div className="flex items-start justify-between gap-3">

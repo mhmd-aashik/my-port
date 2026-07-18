@@ -187,3 +187,34 @@ body {
   color: var(--foreground);
   font-weight: 600;
 }
+
+/* [Add ...] editorial placeholders in My Story */
+.story-placeholder {
+  display: inline-block;
+  margin: 0 0.15rem;
+  padding: 0.1rem 0.4rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface-raised);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--subtle);
+}
+
+/* Markdown tables in blog posts */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  font-size: 0.875rem;
+}
+.prose th,
+.prose td {
+  border: 1px solid var(--border-c);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose th {
+  background: var(--surface-raised);
+  color: var(--foreground);
+}

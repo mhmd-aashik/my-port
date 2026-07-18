@@ -3,6 +3,9 @@ import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
 import { ProjectGallery } from "@/components/projects/project-gallery";
+import { getProjects } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -11,7 +14,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/projects" },
 };
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getProjects();
+
   return (
     <>
       <PageHeader
@@ -21,7 +26,7 @@ export default function ProjectsPage() {
       />
       <Section>
         <Reveal>
-          <ProjectGallery />
+          <ProjectGallery projects={projects} />
         </Reveal>
       </Section>
     </>

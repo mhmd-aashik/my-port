@@ -3,7 +3,9 @@ import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section } from "@/components/ui/section";
-import { experience } from "@/data/experience";
+import { getExperiences } from "@/lib/content";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Experience",
@@ -12,7 +14,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/experience" },
 };
 
-export default function ExperiencePage() {
+export default async function ExperiencePage() {
+  const experience = await getExperiences();
+
   return (
     <>
       <PageHeader
@@ -23,7 +27,7 @@ export default function ExperiencePage() {
       <Section>
         <ol className="border-l border-border">
           {experience.map((role, i) => (
-            <Reveal key={`${role.company}-${role.period}`} delay={i * 0.05}>
+            <Reveal key={role.id} delay={i * 0.05}>
               <li className="relative pb-14 pl-8 last:pb-0 sm:pl-12">
                 <span
                   className="absolute -left-[5px] top-2 size-2.5 rounded-full border-2 border-background bg-accent"
@@ -33,14 +37,16 @@ export default function ExperiencePage() {
                   <span>{role.period}</span>
                   <span aria-hidden>·</span>
                   <span>{role.employmentType}</span>
-                  <span aria-hidden>·</span>
-                  <span>{role.location}</span>
+                  {role.location && (
+                    <>
+                      <span aria-hidden>·</span>
+                      <span>{role.location}</span>
+                    </>
+                  )}
                 </div>
                 <h2 className="mt-2 text-xl font-semibold">
                   {role.role}{" "}
-                  <span className="font-normal text-muted">
-                    — {role.company}
-                  </span>
+                  <span className="font-normal text-muted">— {role.company}</span>
                 </h2>
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
                   {role.context}
@@ -53,58 +59,44 @@ export default function ExperiencePage() {
                     </h3>
                     <ul className="mt-2 space-y-2">
                       {role.responsibilities.map((r) => (
-                        <li
-                          key={r}
-                          className="flex gap-2.5 text-sm leading-relaxed text-muted"
-                        >
-                          <span
-                            className="mt-2 size-1 shrink-0 rounded-full bg-accent"
-                            aria-hidden
-                          />
+                        <li key={r} className="flex gap-2.5 text-sm leading-relaxed text-muted">
+                          <span className="mt-2 size-1 shrink-0 rounded-full bg-accent" aria-hidden />
                           {r}
                         </li>
                       ))}
                     </ul>
                   </div>
                   <div className="space-y-5">
-                    <div>
-                      <h3 className="font-mono text-xs uppercase tracking-wider text-subtle">
-                        Technical challenges
-                      </h3>
-                      <ul className="mt-2 space-y-2">
-                        {role.challenges.map((c) => (
-                          <li
-                            key={c}
-                            className="flex gap-2.5 text-sm leading-relaxed text-muted"
-                          >
-                            <span
-                              className="mt-2 size-1 shrink-0 rounded-full bg-border-strong"
-                              aria-hidden
-                            />
-                            {c}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h3 className="font-mono text-xs uppercase tracking-wider text-subtle">
-                        Outcomes
-                      </h3>
-                      <ul className="mt-2 space-y-2">
-                        {role.outcomes.map((o) => (
-                          <li
-                            key={o}
-                            className="flex gap-2.5 text-sm leading-relaxed text-muted"
-                          >
-                            <span
-                              className="mt-2 size-1 shrink-0 rounded-full bg-accent"
-                              aria-hidden
-                            />
-                            {o}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {role.challenges.length > 0 && (
+                      <div>
+                        <h3 className="font-mono text-xs uppercase tracking-wider text-subtle">
+                          Technical challenges
+                        </h3>
+                        <ul className="mt-2 space-y-2">
+                          {role.challenges.map((c) => (
+                            <li key={c} className="flex gap-2.5 text-sm leading-relaxed text-muted">
+                              <span className="mt-2 size-1 shrink-0 rounded-full bg-border-strong" aria-hidden />
+                              {c}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {role.outcomes.length > 0 && (
+                      <div>
+                        <h3 className="font-mono text-xs uppercase tracking-wider text-subtle">
+                          Outcomes
+                        </h3>
+                        <ul className="mt-2 space-y-2">
+                          {role.outcomes.map((o) => (
+                            <li key={o} className="flex gap-2.5 text-sm leading-relaxed text-muted">
+                              <span className="mt-2 size-1 shrink-0 rounded-full bg-accent" aria-hidden />
+                              {o}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 </div>
 

@@ -1,7 +1,7 @@
-import { getAllPosts } from "@/lib/blog";
+import { getPublishedPosts } from "@/lib/content";
 import { siteConfig } from "@/data/profile";
 
-export const dynamic = "force-static";
+export const revalidate = 300;
 
 function escapeXml(s: string): string {
   return s
@@ -11,8 +11,14 @@ function escapeXml(s: string): string {
     .replace(/"/g, "&quot;");
 }
 
-export function GET() {
-  const posts = getAllPosts();
+export async function GET() {
+  let posts: Awaited<ReturnType<typeof getPublishedPosts>> = [];
+  try {
+    posts = await getPublishedPosts();
+  } catch {
+    // DB unavailable — serve an empty feed rather than an error.
+  }
+
   const items = posts
     .map(
       (p) => `    <item>

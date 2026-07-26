@@ -15,5 +15,13 @@ if (!passcode || passcode.length < 10) {
 }
 
 const hash = bcrypt.hashSync(passcode, 12);
-console.log("\nAdd this line to .env.local (and Railway service variables):\n");
-console.log(`ADMIN_PASSCODE_HASH=${hash}\n`);
+
+// Next.js env files expand $VAR references, so every $ must be escaped.
+const escaped = hash.replaceAll("$", "\\$");
+
+console.log("\nAdd this line to .env.local exactly as printed (the \\$ escaping matters):\n");
+console.log(`ADMIN_PASSCODE_HASH=${escaped}\n`);
+console.log(
+  "For Railway service variables, use the UNESCAPED value instead (Railway does not expand $):\n"
+);
+console.log(`${hash}\n`);

@@ -1,48 +1,7 @@
 import { ArrowRight, Download, Github, Linkedin, Mail } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Reveal } from "@/components/ui/reveal";
-
-// Minimal architecture-inspired visual: a request's path through a system.
-function SystemDiagram() {
-  const node =
-    "rounded-md border border-border bg-surface px-3 py-2 font-mono text-xs text-muted";
-  const edge = "h-px w-6 bg-border-strong sm:w-10";
-  return (
-    <div
-      aria-hidden
-      className="relative hidden items-center justify-center rounded-lg border border-border bg-surface/50 p-8 lg:flex"
-    >
-      <div className="absolute inset-0 bg-grid opacity-60" />
-      <div className="relative flex flex-col items-center gap-4">
-        <div className="flex items-center gap-2">
-          <span className={node}>client</span>
-          <span className={edge} />
-          <span className="rounded-md border border-accent/40 bg-accent-soft px-3 py-2 font-mono text-xs text-accent">
-            api gateway
-          </span>
-          <span className={edge} />
-          <span className={node}>auth</span>
-        </div>
-        <span className="h-6 w-px bg-border-strong" />
-        <div className="flex items-center gap-2">
-          <span className={node}>svc·booking</span>
-          <span className={edge} />
-          <span className="rounded-md border border-accent/40 bg-accent-soft px-3 py-2 font-mono text-xs text-accent">
-            rabbitmq
-          </span>
-          <span className={edge} />
-          <span className={node}>svc·reporting</span>
-        </div>
-        <span className="h-6 w-px bg-border-strong" />
-        <div className="flex items-center gap-2">
-          <span className={node}>postgres</span>
-          <span className={node}>redis</span>
-          <span className={node}>s3</span>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { SystemDiagram } from "./system-diagram";
 
 // Applies the gradient to the last few words of the (CMS-editable) heading.
 function GradientHeading({ text }: { text: string }) {
@@ -72,6 +31,7 @@ export function Hero({
   availability: string;
   cvPath: string;
   social: { linkedin: string; github: string; email: string };
+  avatar?: string;
 }) {
   return (
     <div className="relative overflow-hidden">
@@ -139,7 +99,9 @@ export function Hero({
           </div>
         </Reveal>
         <Reveal delay={0.15}>
-          <SystemDiagram />
+          <div className="flex flex-col items-center justify-center gap-6">
+            <SystemDiagram />
+          </div>
         </Reveal>
       </div>
     </div>

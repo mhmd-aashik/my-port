@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
-import { ButtonLink } from "@/components/ui/button-link";
 import { PageHeader } from "@/components/ui/page-header";
 import { Reveal } from "@/components/ui/reveal";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -65,9 +63,6 @@ export default async function AboutPage() {
                   className="rounded-lg border border-border object-cover"
                   unoptimized={profile.avatar.startsWith("/api/")}
                 />
-                <ButtonLink href="/story" variant="secondary" className="w-full">
-                  Read My Story <ArrowRight className="size-4" aria-hidden />
-                </ButtonLink>
               </div>
             </Reveal>
           </div>

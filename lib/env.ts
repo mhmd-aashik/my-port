@@ -14,7 +14,8 @@ export function loadEnv(): void {
       const idx = trimmed.indexOf("=");
       if (idx === -1) continue;
       const key = trimmed.slice(0, idx).trim();
-      const value = trimmed.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+      let value = trimmed.slice(idx + 1).trim().replace(/^["']|["']$/g, "");
+      value = value.replaceAll("\\$", "$");
       if (!(key in process.env)) process.env[key] = value;
     }
   }

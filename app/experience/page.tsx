@@ -28,7 +28,7 @@ export default async function ExperiencePage() {
         <ol className="border-l border-border">
           {experience.map((role, i) => (
             <Reveal key={role.id} delay={i * 0.05}>
-              <li className="relative pb-14 pl-8 last:pb-0 sm:pl-12">
+              <li className="relative pb-10 sm:pb-12 pl-8 last:pb-0 sm:pl-12">
                 <span
                   className="absolute -left-[5px] top-2 size-2.5 rounded-full border-2 border-background bg-accent"
                   aria-hidden
@@ -51,6 +51,12 @@ export default async function ExperiencePage() {
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted">
                   {role.context}
                 </p>
+
+                <div className="mt-3.5 flex flex-wrap gap-1.5">
+                  {role.tech.map((t) => (
+                    <Badge key={t}>{t}</Badge>
+                  ))}
+                </div>
 
                 <div className="mt-5 grid gap-6 lg:grid-cols-2">
                   <div>
@@ -98,12 +104,6 @@ export default async function ExperiencePage() {
                       </div>
                     )}
                   </div>
-                </div>
-
-                <div className="mt-5 flex flex-wrap gap-1.5">
-                  {role.tech.map((t) => (
-                    <Badge key={t}>{t}</Badge>
-                  ))}
                 </div>
               </li>
             </Reveal>

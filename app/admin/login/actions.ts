@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { clientIp } from "@/lib/admin/auth";
 import { logAudit } from "@/lib/admin/audit";
-import { rateLimit } from "@/lib/admin/rate-limit";
 import {
   createSessionToken,
   SESSION_COOKIE,
@@ -21,19 +20,9 @@ export async function login(
   formData: FormData
 ): Promise<LoginState> {
   const ip = await clientIp();
-  const { allowed, retryAfterSeconds } = rateLimit(
-    `login:${ip}`,
-    5,
-    15 * 60 * 1000
-  );
-  if (!allowed) {
-    return {
-      error: `Too many attempts. Try again in ${Math.ceil(retryAfterSeconds / 60)} minutes.`,
-    };
-  }
 
   const passcode = formData.get("passcode");
-  const hash = process.env.ADMIN_PASSCODE_HASH;
+  let hash = process.env.ADMIN_PASSCODE_HASH;
 
   if (!hash) {
     return {
@@ -41,6 +30,11 @@ export async function login(
         "ADMIN_PASSCODE_HASH is not configured. Run: node scripts/hash-passcode.mjs",
     };
   }
+
+  // Normalize backslash-escaped '$' characters which can occur when Next.js or dotenv
+  // loads the env file with backslashes.
+  hash = hash.replaceAll("\\$", "$");
+
   if (typeof passcode !== "string" || passcode.length === 0 || passcode.length > 200) {
     return { error: GENERIC_ERROR };
   }

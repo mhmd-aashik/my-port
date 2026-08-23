@@ -13,7 +13,6 @@ const items = [
   { href: "/admin/education", label: "Education" },
   { href: "/admin/projects", label: "Projects" },
   { href: "/admin/skills", label: "Skills" },
-  { href: "/admin/story", label: "My Story" },
   { href: "/admin/blog", label: "Blog" },
   { href: "/admin/media", label: "Media" },
   { href: "/admin/messages", label: "Messages" },

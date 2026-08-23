@@ -218,3 +218,18 @@ body {
   background: var(--surface-raised);
   color: var(--foreground);
 }
+
+/* React Flow Connection Edge Animations */
+@keyframes flowDash {
+  from {
+    stroke-dashoffset: 28;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-flow {
+  animation: flowDash 1.2s linear infinite;
+}
+

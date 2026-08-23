@@ -42,7 +42,7 @@ export const getProfile = cache(async () => {
     responseTime: p?.responseTime || "",
     subheadline: p?.shortBio || "",
     summary: p?.longBio || "",
-    avatar: mediaUrl(p?.photoId) ?? "/images/me1.png",
+    avatar: mediaUrl(p?.photoId) ?? "/images/me1.PNG",
     cvPath: mediaUrl(p?.cvId) ?? "/cv/aashik-cv.pdf",
   };
 });

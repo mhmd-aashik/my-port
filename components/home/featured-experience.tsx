@@ -27,7 +27,7 @@ export function FeaturedExperience({ roles }: { roles: PublicExperience[] }) {
       <ol className="mt-10 space-y-0 border-l border-border">
         {roles.map((role, i) => (
           <Reveal key={role.id} delay={i * 0.08}>
-            <li className="relative pb-10 pl-8 last:pb-0">
+            <li className="relative pb-8 pl-8 last:pb-0">
               <span
                 className="absolute -left-[5px] top-1.5 size-2.5 rounded-full border-2 border-background bg-accent"
                 aria-hidden
@@ -41,7 +41,7 @@ export function FeaturedExperience({ roles }: { roles: PublicExperience[] }) {
                 {role.context}
               </p>
               <div className="mt-3 flex flex-wrap gap-1.5">
-                {role.tech.slice(0, 6).map((t) => (
+                {role.tech.map((t) => (
                   <Badge key={t}>{t}</Badge>
                 ))}
               </div>

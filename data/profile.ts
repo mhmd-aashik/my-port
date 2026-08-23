@@ -28,7 +28,7 @@ export const profile = {
     "Production deployment experience",
   ],
   responseTime: "I usually respond within one to two business days.",
-  avatar: "/images/me1.png",
+  avatar: "/images/me1.PNG",
   cvPath: "/cv/aashik-cv.pdf",
 };
 

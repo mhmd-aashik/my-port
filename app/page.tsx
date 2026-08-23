@@ -1,31 +1,59 @@
-import { IdeTabs } from "@/components/layout/ide-tabs";
-import { IdeTerminal } from "@/components/layout/ide-terminal";
-import { Hero } from "@/components/sections/hero";
-import { About } from "@/components/sections/about";
-import { Experience } from "@/components/sections/experience";
-import { Education } from "@/components/sections/education";
-import { Projects } from "@/components/sections/projects";
-import { HobbyProjects } from "@/components/sections/hobby-projects";
-import { Skills } from "@/components/sections/skills";
-import { Mentorship } from "@/components/sections/mentorship";
-import { Contact } from "@/components/sections/contact";
+import { Hero } from "@/components/home/hero";
+import { Summary } from "@/components/home/summary";
+import { FeaturedExperience } from "@/components/home/featured-experience";
+import { FeaturedProjects } from "@/components/home/featured-projects";
+import { Expertise } from "@/components/home/expertise";
+import { LatestPosts } from "@/components/home/latest-posts";
+import { ContactCta } from "@/components/home/contact-cta";
+import {
+  getExperiences,
+  getProfile,
+  getProjects,
+  getPublishedPosts,
+  getSettings,
+  getSkillGroups,
+  getSocialLinks,
+} from "@/lib/content";
 
-export default function Home() {
+export const revalidate = 300;
+
+export default async function HomePage() {
+  const [profile, settings, social, experiences, projects, groups, posts] =
+    await Promise.all([
+      getProfile(),
+      getSettings(),
+      getSocialLinks(),
+      getExperiences(),
+      getProjects(),
+      getSkillGroups(),
+      getPublishedPosts(),
+    ]);
+
+  const highlights = [
+    `${profile.yearsOfExperience} years of experience`,
+    "Full-stack and backend engineering",
+    "Microservices and distributed systems",
+    "International client experience",
+    "Production deployment experience",
+  ];
+
   return (
-    <div className="flex min-h-screen bg-background flex-col">
-      <IdeTabs />
-      <main className="flex-1 overflow-y-auto min-h-0">
-        <Hero />
-        <About />
-        <Experience />
-        <Education />
-        <Projects />
-        <HobbyProjects />
-        <Skills />
-        <Mentorship />
-        <Contact />
-      </main>
-      <IdeTerminal />
-    </div>
+    <>
+      <Hero
+        heading={settings.heroHeading || "I build scalable digital products, from intuitive interfaces to distributed backend systems."}
+        description={settings.heroDescription || profile.subheadline}
+        ctaPrimary={settings.heroCtaPrimary}
+        ctaSecondary={settings.heroCtaSecondary}
+        availability={profile.availability}
+        cvPath={profile.cvPath}
+        social={social}
+      />
+      <Summary summary={profile.summary} highlights={highlights} />
+      <FeaturedExperience roles={experiences.filter((e) => e.featured)} />
+      <FeaturedProjects projects={projects.filter((p) => p.featured)} />
+      <Expertise groups={groups.slice(0, 3)} />
+      <LatestPosts posts={posts.slice(0, 3)} />
+      <ContactCta responseTime={profile.responseTime} social={social} />
+    </>
   );
 }

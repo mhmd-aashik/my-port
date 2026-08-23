@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# aashik.dev — Portfolio + Private CMS
 
-## Getting Started
+Database-driven portfolio of Mohammed Aashik with a private, owner-only CMS at `/admin`. Next.js 16 · Drizzle ORM · PostgreSQL (Railway) · Railway Storage Bucket · Tailwind 4.
 
-First, run the development server:
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local          # then fill in values (see below)
+npm run hash-passcode "passcode"    # → paste output into .env.local
+npm run db:generate                 # generate SQL migrations into drizzle/
+npm run db:migrate                  # apply to DATABASE_URL
+npm run db:seed                     # idempotent content seed
+npm run dev                         # http://localhost:3000  (CMS: /admin)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Script | Purpose |
+|---|---|
+| `dev` / `build` / `start` | Next.js |
+| `lint` / `typecheck` / `test` | ESLint · tsc · Vitest unit tests |
+| `db:generate` | Generate reviewable migrations from `db/schema/*` |
+| `db:migrate` | Apply migrations |
+| `db:studio` | Drizzle Studio (safe DB inspection) |
+| `db:seed` | Idempotent seed from `data/*.ts` + `content/blog/*.md` |
+| `db:reset-dev` | Truncate all tables — dev only, guarded |
+| `hash-passcode` | Generate `ADMIN_PASSCODE_HASH` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How content works
 
-## Learn More
+- **All editable content lives in PostgreSQL** and is managed at `/admin` (settings, profile, about, experience, education, projects, skills, story, blog, media, messages, audit log).
+- `data/*.ts` and `content/blog/*.md` are **seed sources only** — after seeding, edit through the CMS.
+- Public pages use ISR; every CMS save revalidates the affected pages, sitemap, and RSS — no redeploys needed.
+- Drafts and archived content never appear publicly; preview drafts from the blog list in the CMS.
+- Uploads go to the private Railway bucket; images/CV are served through `/api/media/[id]`.
 
-To learn more about Next.js, take a look at the following resources:
+## Docs
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `docs/architecture.md` — ERD (Mermaid), security model, storage flow, data safety
+- `docs/railway-deployment.md` — step-by-step Railway setup, migration, backup/restore, secret rotation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
+```
+app/            public pages · /admin CMS · /api (contact, media, health)
+components/     layout, home sections, projects, forms, ui, admin
+db/             drizzle client, schema (21 tables), relations
+drizzle/        generated SQL migrations (created by db:generate)
+lib/            content queries, markdown pipeline, admin auth/session/audit,
+                storage (S3), validation, env loader
+scripts/        hash-passcode, seed, reset-dev
+tests/          vitest units: session, validation, markdown, file validation
+data/ content/  seed sources (not the runtime content source)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Before going live
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Fill `RAILWAY_BUCKET_SECRET_ACCESS_KEY` in `.env.local`.
+2. Set `ADMIN_PASSCODE_HASH` (never commit it; keep `.env.example` values empty).
+3. Rotate the DB password and bucket credentials in Railway (they were shared in chat during development).
+4. Fill the `[Add ...]` placeholders in My Story via the CMS.
+5. Follow `docs/railway-deployment.md`.

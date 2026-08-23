@@ -1,82 +1,115 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import { JetBrains_Mono } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Navbar } from "@/components/layout/navbar";
+import { Footer } from "@/components/layout/footer";
+import { siteConfig } from "@/data/profile";
+import { getNavItems, getProfile, getSettings, getSocialLinks } from "@/lib/content";
 import { cn } from "@/lib/utils";
-import { Toaster } from "sonner";
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-});
-
-export const metadata: Metadata = {
-  title: "Mohammed Aashik | Full-Stack AI Engineer",
-  description:
-    "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks. 7+ years of experience in AI integration, production systems, and DevOps.",
-  keywords: [
-    "Mohammed Aashik",
-    "Full-Stack Engineer",
-    "AI Engineer",
-    "DevOps",
-    "Web Development",
-    "Mobile Applications",
-    "Next.js",
-    "React",
-    "TypeScript",
-  ],
-  authors: [{ name: "Mohammed Aashik" }],
-  creator: "Mohammed Aashik",
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://mohammedaashik.com",
-    title: "Mohammed Aashik | Full-Stack AI Engineer",
-    description:
-      "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks.",
-    siteName: "Mohammed Aashik Portfolio",
-    images: [
-      {
-        url: "/images/me.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Mohammed Aashik | Full-Stack AI Engineer",
-      },
+export async function generateMetadata(): Promise<Metadata> {
+  let title = siteConfig.title;
+  let description = siteConfig.description;
+  try {
+    const settings = await getSettings();
+    if (settings.siteTitle) title = settings.siteTitle;
+    if (settings.siteDescription) description = settings.siteDescription;
+  } catch {
+    // Database unavailable (e.g. first build before migration) — use fallbacks.
+  }
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: { default: title, template: "%s — Mohammed Aashik" },
+    description,
+    keywords: [
+      "Full Stack Software Engineer",
+      "Senior Software Engineer",
+      "NestJS Developer",
+      "Node.js Developer",
+      "Backend Engineer",
+      "Next.js Developer",
+      "React Developer",
+      "Microservices Engineer",
+      "AI Engineer",
+      "Software Engineer UAE",
+      "Full Stack Developer Dubai",
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Mohammed Aashik | Full-Stack AI Engineer",
-    description:
-      "Full-Stack AI Engineer building intelligent applications with LLMs, RAG, agents, and modern web stacks.",
-    creator: "@mohammedaashik",
-    images: ["/images/me.jpg"],
-  },
-};
+    authors: [{ name: "Mohammed Aashik", url: siteConfig.url }],
+    creator: "Mohammed Aashik",
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      locale: "en_US",
+      url: siteConfig.url,
+      title,
+      description,
+      siteName: siteConfig.name,
+    },
+    twitter: { card: "summary_large_image", title, description },
+    robots: { index: true, follow: true },
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
+  const [navItems, profile, social, settings] = await Promise.all([
+    getNavItems(),
+    getProfile(),
+    getSocialLinks(),
+    getSettings(),
+  ]);
+
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    jobTitle: profile.title,
+    url: siteConfig.url,
+    email: profile.email,
+    address: { "@type": "PostalAddress", addressLocality: "Dubai", addressCountry: "AE" },
+    sameAs: [social.linkedin, social.github].filter(Boolean),
+  };
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteConfig.name,
+    url: siteConfig.url,
+  };
+
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen font-sans antialiased",
           GeistSans.variable,
-          jetbrainsMono.variable
+          GeistMono.variable
         )}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([personJsonLd, websiteJsonLd]),
+          }}
+        />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem={false}
           disableTransitionOnChange
         >
-          {children}
-          <Toaster theme="dark" richColors />
+          <Navbar navItems={navItems} cvPath={profile.cvPath} />
+          <main id="main" className="pt-16">
+            {children}
+          </main>
+          <Footer
+            navItems={navItems}
+            footerText={settings.footerText}
+            social={{ linkedin: social.linkedin, github: social.github, email: social.email }}
+            name={profile.name}
+          />
         </ThemeProvider>
       </body>
     </html>

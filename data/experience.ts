@@ -1,50 +1,143 @@
-export const experience = [
+export type Experience = {
+  company: string;
+  role: string;
+  employmentType: string;
+  period: string;
+  location: string;
+  context: string;
+  responsibilities: string[];
+  challenges: string[];
+  outcomes: string[];
+  tech: string[];
+  featured: boolean;
+};
+
+// NOTE: Veuston dates were unclear in the source CV — confirmed as 2026 by Aashik.
+export const experience: Experience[] = [
   {
-    company: "Pelican Cube (Govt Project – Sri Lankan Railway)",
+    company: "Veuston International",
+    role: "Senior Software Engineer",
+    employmentType: "Full-time",
+    period: "Jan 2026 – Present",
+    location: "Remote",
+    context:
+      "Multi-tenant SaaS platform serving isolated organization environments.",
+    responsibilities: [
+      "Designed and built the multi-tenant backend architecture supporting isolated organization environments with dynamic slug-based routing.",
+      "Designed a granular resource–action role-based access control (RBAC) system.",
+      "Implemented JWT authentication with Passport.js strategies.",
+      "Built multi-step OTP verification flows using Resend.",
+    ],
+    challenges: [
+      "Keeping tenant data strictly isolated while sharing a single codebase and infrastructure.",
+      "Modeling permissions granular enough for enterprise clients without making them unmanageable.",
+    ],
+    outcomes: [
+      "A tenant-aware backend foundation that new organizations can onboard onto without code changes.",
+    ],
+    tech: ["NestJS", "Node.js", "TypeScript", "PostgreSQL", "Passport.js", "JWT", "Resend"],
+    featured: true,
+  },
+  {
+    company: "Pelican Cube",
     role: "Software Engineer",
+    employmentType: "Full-time",
     period: "Jan 2024 – Dec 2025",
-    description:
-      "Building and maintaining enterprise web apps. Working on smart ticketing & seat reservation system, railway reporting and train management.",
-    tech: ["Next.js", "React.js", "Flutter", "NestJS", "Express.js", "AWS"],
+    location: "Sri Lanka",
+    context:
+      "Large government railway ticketing and train-management platform: smart ticketing, seat reservation, reporting, and train management.",
+    responsibilities: [
+      "Built and maintained NestJS and Node.js microservices behind the ticketing platform.",
+      "Refactored RabbitMQ message-driven services for reliability and clearer ownership.",
+      "Improved reporting performance across sales, revenue, and operational dashboards.",
+      "Developed Next.js and React components for admin and operational interfaces.",
+      "Worked with Keycloak authentication and role-based access control.",
+      "Contributed to API specifications and architecture documentation.",
+    ],
+    challenges: [
+      "Refactoring live message-driven services without disrupting ticket sales.",
+      "Reporting queries over large operational datasets that had grown slow over time.",
+    ],
+    outcomes: [
+      "Reduced technical debt through systematic refactoring and documented service boundaries.",
+      "Faster, more reliable reporting for railway operations staff.",
+    ],
+    tech: ["NestJS", "Node.js", "RabbitMQ", "Next.js", "React", "Keycloak", "Flutter", "AWS"],
+    featured: true,
   },
   {
-    company: "Inventurix Technology (Pvt) Ltd",
+    company: "InventuriX Technologies",
     role: "Software Engineer",
+    employmentType: "Full-time",
     period: "Oct 2021 – Nov 2023",
-    description:
-      "Led end-to-end architecture and development of scalable full-stack enterprise applications for international clients. Architected high-performance REST APIs and microservices with security-first design. Spearheaded advanced Next.js applications with SSR, SSG, and reusable component libraries. Designed scalable MongoDB data models and CMS structures. Optimized Core Web Vitals (90+ Lighthouse scores). Managed Docker-based production and CI/CD pipelines. Mentored junior developers and drove architectural improvements.",
-    tech: [
-      "Next.js",
-      "React",
-      "Node.js",
-      "MongoDB",
-      "TypeScript",
-      "Docker",
-      "CI/CD",
+    location: "Sri Lanka",
+    context:
+      "Full-stack delivery of enterprise web applications for international clients.",
+    responsibilities: [
+      "Led full-stack development for international clients, from requirements to production.",
+      "Designed REST APIs and microservices with security-first defaults.",
+      "Built advanced Next.js applications using SSR, SSG, API routes, and dynamic routing.",
+      "Designed MongoDB schemas and CMS architecture for content-heavy products.",
+      "Implemented authentication and distributed session management.",
+      "Managed Docker deployments and CI/CD pipelines.",
+      "Mentored junior developers and reviewed architecture decisions.",
     ],
+    challenges: [
+      "Translating loosely defined stakeholder requirements into concrete system designs.",
+      "Improving Core Web Vitals on content-heavy pages without redesigning them.",
+    ],
+    outcomes: [
+      "Consistent 90+ Lighthouse scores across delivered applications.",
+      "Junior developers mentored into independent feature ownership.",
+    ],
+    tech: ["Next.js", "React", "Node.js", "MongoDB", "TypeScript", "Docker", "CI/CD"],
+    featured: true,
   },
   {
-    company: "Inventurix Technology (Pvt) Ltd",
+    company: "InventuriX Technologies",
     role: "Associate Software Engineer",
+    employmentType: "Full-time",
     period: "Oct 2019 – Oct 2021",
-    description:
-      "Delivered full-stack enterprise solutions for UK-based clients. Engineered dashboards and analytics modules for data-driven decisions. Designed secure REST APIs with optimized database queries. Implemented robust authentication and token-based authorization. Integrated Stripe subscription systems with webhook automation. Achieved 90+ Lighthouse scores through SSR/SSG, caching, and bundle optimization. Contributed to CI/CD pipelines and Dockerized deployments.",
-    tech: [
-      "Next.js",
-      "React",
-      "Node.js",
-      "Express.js",
-      "MongoDB",
-      "TypeScript",
-      "Stripe",
+    location: "Sri Lanka",
+    context: "Full-stack solutions for UK-based clients.",
+    responsibilities: [
+      "Built applications and analytics dashboards for UK-based clients.",
+      "Designed secure REST APIs with optimized database queries.",
+      "Implemented token-based authentication and authorization.",
+      "Integrated Stripe subscriptions with webhook automation.",
+      "Improved SEO and frontend performance through SSR/SSG, caching, and bundle optimization.",
+      "Contributed to Docker and CI/CD workflows.",
     ],
+    challenges: [
+      "Making subscription billing resilient to webhook failures and retries.",
+    ],
+    outcomes: [
+      "90+ Lighthouse scores on client-facing applications.",
+      "Reliable recurring-billing flows for subscription products.",
+    ],
+    tech: ["Next.js", "React", "Node.js", "Express.js", "MongoDB", "TypeScript", "Stripe"],
+    featured: false,
   },
   {
-    company: "Inventurix Technology (Pvt) Ltd",
-    role: "Intern Software Engineer",
+    company: "InventuriX Technologies",
+    role: "Software Engineer Intern",
+    employmentType: "Internship",
     period: "Apr 2019 – Oct 2019",
-    description:
-      "Contributed to production-grade web applications using React.js, Node.js, and MongoDB. Delivered UI components and feature enhancements improving usability and responsiveness. Assisted in building RESTful APIs and resolving performance bottlenecks. Reduced bug cycles through debugging, testing, and code improvements. Gained hands-on exposure to deployment workflows and collaborative Git-based development.",
+    location: "Sri Lanka",
+    context: "Production web applications built with React, Node.js, and MongoDB.",
+    responsibilities: [
+      "Built React and Node.js features for production applications.",
+      "Created reusable UI components.",
+      "Supported REST API development, debugging, and testing.",
+      "Learned Git workflows and deployment processes.",
+    ],
+    challenges: [
+      "Learning to work in an existing production codebase with real users.",
+    ],
+    outcomes: [
+      "Promoted to Associate Software Engineer after six months.",
+    ],
     tech: ["React.js", "Node.js", "MongoDB", "REST APIs", "Git"],
+    featured: false,
   },
 ];
